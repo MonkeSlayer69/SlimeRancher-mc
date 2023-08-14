@@ -2,7 +2,9 @@ package net.amishi.slimerancher;
 
 import com.mojang.logging.LogUtils;
 import net.amishi.slimerancher.entity.ModEntityTypes;
+import net.amishi.slimerancher.entity.client.renderer.PinkSlimeRenderer;
 import net.amishi.slimerancher.item.ModItems;
+import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -56,7 +58,7 @@ public class SlimeRancher
         @SubscribeEvent
         public static void onClientSetup(FMLClientSetupEvent event)
         {
-
+            EntityRenderers.register(ModEntityTypes.PINK_SLIME.get(), PinkSlimeRenderer::new);
         }
     }
 }

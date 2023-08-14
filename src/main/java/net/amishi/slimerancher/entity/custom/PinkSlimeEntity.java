@@ -7,6 +7,7 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.RandomLookAroundGoal;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
@@ -38,6 +39,7 @@ public class PinkSlimeEntity extends Monster implements IAnimatable {
     @Override
     protected void registerGoals() {
         this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 1.0d));
+        this.goalSelector.addGoal(2, new RandomLookAroundGoal(this));
     }
 
     private <E extends IAnimatable>PlayState predicate(AnimationEvent event) {
@@ -52,7 +54,7 @@ public class PinkSlimeEntity extends Monster implements IAnimatable {
 
     @Override
     public void registerControllers(AnimationData data) {
-        data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
+        //data.addAnimationController(new AnimationController(this, "controller", 0, this::predicate));
     }
 
     @Override

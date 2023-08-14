@@ -1,6 +1,6 @@
 {
-  "parent": "item/generared",
-  "texutres": {
+  "parent": "minecraft:item/generated",
+  "textures": {
     "layer0": "slimerancher:item/pink_slime_spawn_egg"
   }
 }

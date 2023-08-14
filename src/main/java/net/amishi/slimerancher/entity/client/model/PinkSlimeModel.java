@@ -13,11 +13,13 @@ public class PinkSlimeModel extends AnimatedGeoModel {
 
     @Override
     public ResourceLocation getTextureResource(Object object) {
-        return new ResourceLocation(SlimeRancher.MODID, "textures/entity/pink_slime.png");
+        return new ResourceLocation(SlimeRancher.MODID, "textures/entity/pink_slime_texture.png");
     }
+
 
     @Override
     public ResourceLocation getAnimationResource(Object animatable) {
         return new ResourceLocation(SlimeRancher.MODID, "animations/pink_slime.animation.json");
     }
+
 }

@@ -2,9 +2,13 @@ package net.amishi.slimerancher.item.custom;
 
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
+import net.amishi.slimerancher.entity.custom.PinkSlimeEntity;
+import net.minecraft.ChatFormatting;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.stats.Stats;
 import net.minecraft.world.InteractionHand;
@@ -14,6 +18,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BaseSpawner;
 import net.minecraft.world.level.ClipContext;
@@ -27,24 +32,28 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 
+//TODO Make spawn egg item visible
+
 public class SlimeSpawnEgg extends Item {
 
-    private static final Map<EntityType<? extends Mob>, SlimeSpawnEgg> BY_ID = Maps.newIdentityHashMap();
+    private static final String TOOLTIP_SHIFT_DOWN = "tooltip.slimerancher.shift_down";
+    private static final String TOOLTIP_INFO = "tooltip.slimerancher.slime_spawn_egg";
+
     private final EntityType<?> defaultType;
 
     public SlimeSpawnEgg(EntityType<? extends Mob> pDefaultType, Properties pProperties) {
         super(pProperties);
         this.defaultType = pDefaultType;
-        if (pDefaultType != null)
-            BY_ID.put(pDefaultType, this);
     }
 
+    @Override
     public InteractionResult useOn(UseOnContext pContext) {
         Level level = pContext.getLevel();
         if (!(level instanceof ServerLevel)) {
@@ -85,52 +94,7 @@ public class SlimeSpawnEgg extends Item {
         }
     }
 
-    public InteractionResultHolder<ItemStack> use(Level pLevel, Player pPlayer, InteractionHand pHand) {
-        ItemStack itemstack = pPlayer.getItemInHand(pHand);
-        HitResult hitresult = getPlayerPOVHitResult(pLevel, pPlayer, ClipContext.Fluid.SOURCE_ONLY);
-        if (hitresult.getType() != HitResult.Type.BLOCK) {
-            return InteractionResultHolder.pass(itemstack);
-        } else if (!(pLevel instanceof ServerLevel)) {
-            return InteractionResultHolder.success(itemstack);
-        } else {
-            BlockHitResult blockhitresult = (BlockHitResult)hitresult;
-            BlockPos blockpos = blockhitresult.getBlockPos();
-            if (!(pLevel.getBlockState(blockpos).getBlock() instanceof LiquidBlock)) {
-                return InteractionResultHolder.pass(itemstack);
-            } else if (pLevel.mayInteract(pPlayer, blockpos) && pPlayer.mayUseItemAt(blockpos, blockhitresult.getDirection(), itemstack)) {
-                EntityType<?> entitytype = this.getType(itemstack.getTag());
-                Entity entity = entitytype.spawn((ServerLevel)pLevel, itemstack, pPlayer, blockpos, MobSpawnType.SPAWN_EGG, false, false);
-                if (entity == null) {
-                    return InteractionResultHolder.pass(itemstack);
-                } else {
-                    if (!pPlayer.getAbilities().instabuild) {
-                        itemstack.shrink(1);
-                    }
-
-                    pPlayer.awardStat(Stats.ITEM_USED.get(this));
-                    pLevel.gameEvent(pPlayer, GameEvent.ENTITY_PLACE, entity.position());
-                    return InteractionResultHolder.consume(itemstack);
-                }
-            } else {
-                return InteractionResultHolder.fail(itemstack);
-            }
-        }
-    }
-
-    public boolean spawnsEntity(@Nullable CompoundTag pNbt, EntityType<?> pType) {
-        return Objects.equals(this.getType(pNbt), pType);
-    }
-
-    @Nullable
-    public static SlimeSpawnEgg byId(@Nullable EntityType<?> pType) {
-        return BY_ID.get(pType);
-    }
-
-    public static Iterable<SlimeSpawnEgg> eggs() {
-        return Iterables.unmodifiableIterable(BY_ID.values());
-    }
-
-    public EntityType<?> getType(@Nullable CompoundTag pNbt) {
+    public EntityType<?> getType(@javax.annotation.Nullable CompoundTag pNbt) {
         if (pNbt != null && pNbt.contains("EntityTag", 10)) {
             CompoundTag compoundtag = pNbt.getCompound("EntityTag");
             if (compoundtag.contains("id", 8)) {
@@ -141,37 +105,17 @@ public class SlimeSpawnEgg extends Item {
         return this.defaultType;
     }
 
-    public Optional<Mob> spawnOffspringFromSpawnEgg(Player pPlayer, Mob pMob, EntityType<? extends Mob> pEntityType, ServerLevel pServerLevel, Vec3 pPos, ItemStack pStack) {
-        if (!this.spawnsEntity(pStack.getTag(), pEntityType)) {
-            return Optional.empty();
+
+    @Override
+    public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
+        if(Screen.hasShiftDown()) {
+            pTooltipComponents.add(Component.translatable(TOOLTIP_INFO).withStyle(ChatFormatting.RED));
         } else {
-            Mob mob;
-            if (pMob instanceof AgeableMob) {
-                mob = ((AgeableMob)pMob).getBreedOffspring(pServerLevel, (AgeableMob)pMob);
-            } else {
-                mob = pEntityType.create(pServerLevel);
-            }
-
-            if (mob == null) {
-                return Optional.empty();
-            } else {
-                mob.setBaby(true);
-                if (!mob.isBaby()) {
-                    return Optional.empty();
-                } else {
-                    mob.moveTo(pPos.x(), pPos.y(), pPos.z(), 0.0F, 0.0F);
-                    pServerLevel.addFreshEntityWithPassengers(mob);
-                    if (pStack.hasCustomHoverName()) {
-                        mob.setCustomName(pStack.getHoverName());
-                    }
-
-                    if (!pPlayer.getAbilities().instabuild) {
-                        pStack.shrink(1);
-                    }
-
-                    return Optional.of(mob);
-                }
-            }
+            pTooltipComponents.add(Component.translatable(TOOLTIP_SHIFT_DOWN).withStyle(ChatFormatting.YELLOW));
         }
+
+        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }
+
+
 }
