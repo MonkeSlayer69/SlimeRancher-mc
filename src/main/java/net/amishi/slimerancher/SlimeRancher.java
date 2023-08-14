@@ -28,7 +28,6 @@ public class SlimeRancher
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(modEventBus);
-
         ModEntityTypes.register(modEventBus);
 
         modEventBus.addListener(this::commonSetup);
