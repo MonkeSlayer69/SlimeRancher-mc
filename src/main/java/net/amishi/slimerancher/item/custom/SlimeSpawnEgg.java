@@ -43,8 +43,7 @@ import java.util.Optional;
 
 public class SlimeSpawnEgg extends Item {
 
-    private static final String TOOLTIP_SHIFT_DOWN = "tooltip.slimerancher.shift_down";
-    private static final String TOOLTIP_INFO = "tooltip.slimerancher.slime_spawn_egg";
+    public static final String TOOLTIP_SHIFT_DOWN = "tooltip.slimerancher.shift_down";
 
     private final EntityType<?> defaultType;
 
@@ -108,13 +107,7 @@ public class SlimeSpawnEgg extends Item {
 
     @Override
     public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltipComponents, TooltipFlag pIsAdvanced) {
-        if(Screen.hasShiftDown()) {
-            pTooltipComponents.add(Component.translatable(TOOLTIP_INFO).withStyle(ChatFormatting.RED));
-        } else {
-            pTooltipComponents.add(Component.translatable(TOOLTIP_SHIFT_DOWN).withStyle(ChatFormatting.YELLOW));
-        }
 
-        super.appendHoverText(pStack, pLevel, pTooltipComponents, pIsAdvanced);
     }
 
 
