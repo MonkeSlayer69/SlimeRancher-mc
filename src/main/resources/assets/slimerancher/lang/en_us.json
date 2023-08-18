@@ -1,7 +1,9 @@
 {
   "tooltip.slimerancher.shift_down": "Press SHIFT to see more info.",
   "tooltip.slimerancher.pink_slime_spawn_egg": "Spawn a Pink Slime.",
+  "tooltip.slimerancher.tiger_slime_spawn_egg": "Spawn a Tiger Slime.",
 
   "item.slimerancher.pink_slime_spawn_egg": "Pink Slime Spawn Egg",
+  "item.slimerancher.tiger_slime_spawn_egg": "Tiger Slime Spawn Egg",
   "itemGroup.slime_rancher": "Slime Rancher"
 }

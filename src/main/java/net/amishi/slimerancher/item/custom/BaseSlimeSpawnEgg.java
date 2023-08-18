@@ -1,53 +1,37 @@
 package net.amishi.slimerancher.item.custom;
 
-import com.google.common.collect.Iterables;
-import com.google.common.collect.Maps;
-import net.amishi.slimerancher.entity.custom.PinkSlimeEntity;
-import net.minecraft.ChatFormatting;
-import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.stats.Stats;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BaseSpawner;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 
 //TODO Make spawn egg item visible
 
-public class SlimeSpawnEgg extends Item {
+public class BaseSlimeSpawnEgg extends Item {
 
     public static final String TOOLTIP_SHIFT_DOWN = "tooltip.slimerancher.shift_down";
 
     private final EntityType<?> defaultType;
 
-    public SlimeSpawnEgg(EntityType<? extends Mob> pDefaultType, Properties pProperties) {
+    public BaseSlimeSpawnEgg(EntityType<? extends Mob> pDefaultType, Properties pProperties) {
         super(pProperties);
         this.defaultType = pDefaultType;
     }

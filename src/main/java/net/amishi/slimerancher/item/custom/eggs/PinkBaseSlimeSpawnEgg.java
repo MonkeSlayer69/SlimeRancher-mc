@@ -1,6 +1,6 @@
 package net.amishi.slimerancher.item.custom.eggs;
 
-import net.amishi.slimerancher.item.custom.SlimeSpawnEgg;
+import net.amishi.slimerancher.item.custom.BaseSlimeSpawnEgg;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -13,11 +13,11 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class PinkSlimeSpawnEgg extends SlimeSpawnEgg {
+public class PinkBaseSlimeSpawnEgg extends BaseSlimeSpawnEgg {
 
     private static final String TOOLTIP_INFO = "tooltip.slimerancher.pink_slime_spawn_egg";
 
-    public PinkSlimeSpawnEgg(EntityType<? extends Mob> pDefaultType, Properties pProperties) {
+    public PinkBaseSlimeSpawnEgg(EntityType<? extends Mob> pDefaultType, Properties pProperties) {
         super(pDefaultType, pProperties);
     }
 

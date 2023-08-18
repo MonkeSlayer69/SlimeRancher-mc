@@ -3,6 +3,7 @@ package net.amishi.slimerancher.event;
 import net.amishi.slimerancher.SlimeRancher;
 import net.amishi.slimerancher.entity.ModEntityTypes;
 import net.amishi.slimerancher.entity.custom.PinkSlimeEntity;
+import net.amishi.slimerancher.entity.custom.TigerSlimeEntity;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
 import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
@@ -22,9 +23,10 @@ public class ModEvents {
 
         @SubscribeEvent
         public static void entityAttributeEvent(EntityAttributeCreationEvent event){
-            SpawnPlacements.register(ModEntityTypes.PINK_SLIME.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, PinkSlimeEntity::checkMonsterSpawnRules);
+            //SpawnPlacements.register(ModEntityTypes.PINK_SLIME.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, PinkSlimeEntity::checkMonsterSpawnRules);
 
             event.put(ModEntityTypes.PINK_SLIME.get(), PinkSlimeEntity.setAttributes());
+            event.put(ModEntityTypes.TIGER_SLIME.get(), TigerSlimeEntity.setAttributes());
         }
 
     }
